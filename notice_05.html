@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 수능 수학 최종 전략 인포그래픽</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Brilliant Blues -->
+    <!-- Application Structure Plan: The infographic follows a narrative flow designed for easy digestion. It starts with a high-impact hook (the rise of semi-killers), then delves into a quantitative analysis (heatmap), followed by a qualitative breakdown of question types. It then presents future possibilities (scenarios) and culminates in the most practical part: a personalized, tier-based action plan. This top-down structure guides the user from understanding the problem to finding their own solution, transforming the dense report into a clear, actionable story. -->
+    <!-- Visualization & Content Choices: 
+        - Data Point: 준킬러 문항 개수 변화. Goal: Change. Viz: Line Chart. Justification: Best for showing trends over time. Library: Chart.js (Canvas).
+        - Data Point: 수준별 학습 포트폴리오. Goal: Compare. Viz: Donut Chart. Justification: Clearly shows proportional time allocation for each tier. Library: Chart.js (Canvas).
+        - Data Point: 단원별 출제 빈도/난이도. Goal: Organize. Viz: Styled HTML Table. Justification: Effectively simulates a heatmap to show relative density and difficulty without complex libraries, adhering to the NO SVG rule. Method: HTML/CSS/Tailwind.
+        - Data Point: 정성적 출제 기조. Goal: Inform. Viz: Icon-based cards. Justification: Breaks down qualitative analysis into visually engaging, easy-to-understand points using Unicode characters. Method: HTML/CSS/Tailwind.
+        - Data Point: 시나리오별 예측. Goal: Compare. Viz: Multi-column layout. Justification: Allows for easy side-by-side comparison of different future possibilities. Method: HTML/CSS/Tailwind.
+        - Data Point: '전략적 후퇴' 프로세스. Goal: Organize. Viz: Flowchart-style diagram. Justification: Visually represents a decision-making process using simple styled divs and arrows. Method: HTML/CSS/Tailwind (NO SVG/Mermaid).
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #f0f9ff; }
+        .font-black { font-weight: 900; }
+        .card { background-color: white; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); padding: 1.5rem; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 300px; max-height: 400px; }
+        .donut-chart-container { position: relative; width: 100%; max-width: 250px; margin-left: auto; margin-right: auto; height: 250px; max-height: 250px; }
+        h2 { color: #004AAD; }
+        .highlight { color: #0A85FF; }
+        .heatmap-cell { border: 1px solid #e0f2fe; text-align: center; padding: 0.5rem; font-size: 0.75rem; line-height: 1rem; }
+        .flow-step { border: 2px solid #6BCBFF; background-color: #eff6ff; padding: 1rem; border-radius: 0.5rem; text-align: center; font-weight: 700; position: relative; }
+        .flow-arrow { font-size: 2rem; color: #0A85FF; line-height: 1; margin: 0.5rem 0; }
+    </style>
+</head>
+<body class="text-gray-700">
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+
+        <header class="text-center my-8 md:my-12">
+            <h1 class="text-4xl md:text-5xl font-black text-[#004AAD] mb-4">2025 수능 수학, <span class="highlight">새로운 게임의 법칙</span></h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+                '킬러문항 배제'와 '의대 정원 증원'이 만든 새로운 수학의 전장. 데이터에 기반한 최종 전략으로 승리하십시오.
+            </p>
+        </header>
+
+        <section class="my-12 md:my-16">
+            <h2 class="text-3xl font-black text-center mb-2">1. 전장의 변화: '준킬러'의 부상</h2>
+            <p class="text-center text-gray-600 mb-8">전통적 킬러문항은 사라졌지만, 그 자리를 정답률 20-50%의 '준킬러' 문항들이 채우고 있습니다. 이제 수능 수학은 한 문제의 해결 능력이 아닌, 다수의 벽을 넘는 '인지적 지구력'을 요구합니다.</p>
+            <div class="card">
+                <div class="chart-container">
+                    <canvas id="semiKillerTrendChart"></canvas>
+                </div>
+                <p class="text-center mt-4 text-sm text-gray-500">최근 시험에서 준킬러 문항(정답률 20-50%)의 개수가 6-8개 수준으로 뚜렷하게 증가했습니다.</p>
+            </div>
+        </section>
+
+        <section class="my-12 md:my-16">
+            <h2 class="text-3xl font-black text-center mb-8">2. 적의 해부: 출제 패턴 분석</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="card">
+                    <h3 class="text-xl font-bold text-[#004AAD] mb-4">🔗 개념 융합의 정교화</h3>
+                    <p class="mb-4">단일 개념의 깊이보다, 교육과정 내 복수 개념을 융합하여 난이도를 확보합니다.</p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start"><span class="text-2xl mr-3 text-[#0A85FF]">①</span><div><strong class="block">수열의 귀납적 정의 + 함수의 주기성</strong><span class="text-sm text-gray-500">수열 문제를 함수적 관점으로 해석하는 능력 요구</span></div></li>
+                        <li class="flex items-start"><span class="text-2xl mr-3 text-[#0A85FF]">②</span><div><strong class="block">정적분 함수 + 절댓값 그래프</strong><span class="text-sm text-gray-500">미적분 핵심 개념들의 유기적 연결 추론</span></div></li>
+                        <li class="flex items-start"><span class="text-2xl mr-3 text-[#0A85FF]">③</span><div><strong class="block">미분계수 + 정수 조건</strong><span class="text-sm text-gray-500">미분, 함수, 정수론적 사고의 결합</span></div></li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-bold text-[#004AAD] mb-4">낯선 상황 제시 방식</h3>
+                    <p class="mb-4">익숙한 개념을 낯설게 포장하여 문제 해석 능력을 측정합니다.</p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start"><span class="text-2xl mr-3 text-[#6BCBFF]">낯선</span><div><strong class="block">새로운 함수 g(t) 정의</strong><span class="text-sm text-gray-500">t값 변화에 따른 그래프 교점 개수 등</span></div></li>
+                        <li class="flex items-start"><span class="text-2xl mr-3 text-[#6BCBFF]">논리</span><div><strong class="block">복잡한 논리/집합 조건</strong><span class="text-sm text-gray-500">'...가 존재하지 않도록'과 같은 표현</span></div></li>
+                        <li class="flex items-start"><span class="text-2xl mr-3 text-[#6BCBFF]">역추적</span><div><strong class="block">과정의 역추적 요구</strong><span class="text-sm text-gray-500">결과를 주고 원시 함수를 추론</span></div></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="my-12 md:my-16">
+             <h2 class="text-3xl font-black text-center mb-8">3. 미래 예측: 3가지 수능 시나리오</h2>
+             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                 <div class="card text-center">
+                     <div class="text-5xl mb-2">📈</div>
+                     <h3 class="text-xl font-bold text-[#004AAD] mb-2">시나리오 1: 현 기조 유지</h3>
+                     <p class="font-bold text-[#0A85FF] mb-4">높은 확률</p>
+                     <p class="text-sm">다수의 준킬러(6-7개)로 변별력을 확보합니다. 공통과목(수학Ⅱ 미분, 수학Ⅰ 수열)이 최고난도 문항으로 출제될 것입니다.</p>
+                     <p class="mt-4 text-xs bg-blue-100 text-blue-800 font-bold p-2 rounded">대응: 준킬러 타임어택 훈련</p>
+                 </div>
+                 <div class="card text-center">
+                     <div class="text-5xl mb-2">📉</div>
+                     <h3 class="text-xl font-bold text-[#004AAD] mb-2">시나리오 2: 난이도 하향</h3>
+                     <p class="font-bold text-[#0A85FF] mb-4">중간 확률</p>
+                     <p class="text-sm">전반적 난이도는 하락하지만, 사소한 실수를 유발하는 함정 문항과 꼼꼼함을 요구하는 조건 해석이 중요해집니다.</p>
+                     <p class="mt-4 text-xs bg-blue-100 text-blue-800 font-bold p-2 rounded">대응: 기본기 및 계산 실수 방지</p>
+                 </div>
+                 <div class="card text-center">
+                     <div class="text-5xl mb-2">💥</div>
+                     <h3 class="text-xl font-bold text-[#004AAD] mb-2">시나리오 3: 변별력 강화</h3>
+                     <p class="font-bold text-[#0A85FF] mb-4">낮음-중간 확률</p>
+                     <p class="text-sm">의대 증원으로 '사실상의 킬러' 문항(정답률 10%대)이 1-2개 부활할 수 있습니다. 극강의 신유형 출제 가능성이 있습니다.</p>
+                     <p class="mt-4 text-xs bg-blue-100 text-blue-800 font-bold p-2 rounded">대응: 최고난도 기출 분석</p>
+                 </div>
+             </div>
+        </section>
+
+        <section class="my-12 md:my-16">
+            <h2 class="text-3xl font-black text-center mb-8">4. 최종 병기: 나만의 액션 플랜</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <div class="card flex flex-col">
+                    <h3 class="text-2xl font-black text-center text-[#004AAD]">최상위권</h3>
+                    <p class="text-center text-gray-500 mb-4">(안정적 1등급)</p>
+                    <div class="donut-chart-container mx-auto">
+                        <canvas id="topTierChart"></canvas>
+                    </div>
+                    <div class="mt-6 flex-grow">
+                        <h4 class="font-bold mb-2">Action Plan</h4>
+                        <ul class="text-sm space-y-2 list-disc list-inside">
+                            <li>주 2회, 80분 제한 실전 모의고사</li>
+                            <li>고난도 문항 풀이 논리 구조화 및 설명 연습</li>
+                            <li>오답의 '근원적 원인' 분석 노트 작성</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card flex flex-col">
+                    <h3 class="text-2xl font-black text-center text-[#004AAD]">중위권</h3>
+                    <p class="text-center text-gray-500 mb-4">(2-3등급)</p>
+                    <div class="donut-chart-container mx-auto">
+                        <canvas id="midTierChart"></canvas>
+                    </div>
+                    <div class="mt-6 flex-grow">
+                        <h4 class="font-bold mb-2">Action Plan</h4>
+                        <ul class="text-sm space-y-2 list-disc list-inside">
+                            <li>기출 준킬러 유형별 집중 공략</li>
+                            <li>주 3회, 30분 계산력 강화 훈련</li>
+                            <li>'문제 해결 지구력' 훈련 (30분 이상 고민)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card flex flex-col">
+                    <h3 class="text-2xl font-black text-center text-[#004AAD]">하위권</h3>
+                    <p class="text-center text-gray-500 mb-4">(4등급 이하)</p>
+                    <div class="donut-chart-container mx-auto">
+                        <canvas id="lowTierChart"></canvas>
+                    </div>
+                    <div class="mt-6 flex-grow">
+                        <h4 class="font-bold mb-2">Action Plan</h4>
+                        <ul class="text-sm space-y-2 list-disc list-inside">
+                            <li>EBS 연계 교재 Level 1, 2 무한 반복</li>
+                            <li>최근 3개년 기출 3점, 쉬운 4점 완벽 풀이</li>
+                            <li>단원별 기본 공식 백지 테스트</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="my-12 md:my-16">
+            <h2 class="text-3xl font-black text-center mb-8">5. 실전 기술: 전략적 후퇴 프로토콜</h2>
+            <p class="text-center text-gray-600 mb-8">시험 중 특정 문제에 발목 잡히는 것을 방지하는 의사결정 프로세스입니다. 포기가 아닌 효율을 위한 기술입니다.</p>
+            <div class="card">
+                <div class="flex flex-col items-center">
+                    <div class="flow-step w-full md:w-3/4">문제 조우 (11-21번)</div>
+                    <div class="flow-arrow">▼</div>
+                    <div class="flow-step w-full md:w-3/4">3분간 집중적으로 고민</div>
+                    <div class="flow-arrow">▼</div>
+                    <div class="flow-step w-full md:w-3/4 bg-yellow-100 border-yellow-400">명확한 풀이 경로가 보이는가?</div>
+                    <div class="flex w-full md:w-3/4 mt-4">
+                        <div class="w-1/2 px-2 text-center">
+                            <div class="text-lg font-bold text-red-600">NO</div>
+                            <div class="flow-arrow">▼</div>
+                            <div class="flow-step bg-red-100 border-red-400">★ 표시 후 즉시 다음 문제로!</div>
+                        </div>
+                        <div class="w-1/2 px-2 text-center">
+                            <div class="text-lg font-bold text-green-600">YES</div>
+                            <div class="flow-arrow">▼</div>
+                            <div class="flow-step bg-green-100 border-green-400">풀이 진행</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    </div>
+
+    <script>
+        function wrapLabel(label) {
+            const maxLength = 16;
+            if (typeof label !== 'string' || label.length <= maxLength) {
+                return label;
+            }
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                if ((currentLine + ' ' + word).trim().length > maxLength) {
+                    lines.push(currentLine.trim());
+                    currentLine = word;
+                } else {
+                    currentLine = (currentLine + ' ' + word).trim();
+                }
+            }
+            if (currentLine) {
+                lines.push(currentLine.trim());
+            }
+            return lines;
+        }
+
+        const tooltipTitleCallback = function(tooltipItems) {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+                return label.join(' ');
+            }
+            return label;
+        };
+
+        const chartColors = {
+            primary: '#0A85FF',
+            secondary: '#6BCBFF',
+            tertiary: '#A8EFFF',
+            background: 'rgba(10, 133, 255, 0.1)'
+        };
+
+        const semiKillerData = {
+            labels: ['2023 수능', '2024 6모', '2024 9모', '2024 수능', '2025 6모'].map(wrapLabel),
+            datasets: [{
+                label: '준킬러 문항 개수',
+                data: [5, 7, 6, 8, 7],
+                fill: true,
+                backgroundColor: chartColors.background,
+                borderColor: chartColors.primary,
+                tension: 0.3,
+                pointRadius: 5,
+                pointBackgroundColor: chartColors.primary,
+            }]
+        };
+        new Chart(document.getElementById('semiKillerTrendChart'), {
+            type: 'line',
+            data: semiKillerData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true, title: { display: true, text: '개수' } } },
+                plugins: { legend: { display: false }, tooltip: { callbacks: { title: tooltipTitleCallback } } }
+            }
+        });
+
+        const donutOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '65%',
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 15, padding: 15 } }, tooltip: { callbacks: { title: tooltipTitleCallback } } }
+        };
+
+        new Chart(document.getElementById('topTierChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['고난도 신유형', '준킬러 시간 단축', '실수 방지'].map(wrapLabel),
+                datasets: [{ data: [60, 30, 10], backgroundColor: [chartColors.primary, chartColors.secondary, chartColors.tertiary] }]
+            },
+            options: donutOptions
+        });
+
+        new Chart(document.getElementById('midTierChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['준킬러 유형 정복', '기본기 안정화', '고난도 맛보기'].map(wrapLabel),
+                datasets: [{ data: [50, 40, 10], backgroundColor: [chartColors.primary, chartColors.secondary, chartColors.tertiary] }]
+            },
+            options: donutOptions
+        });
+
+        new Chart(document.getElementById('lowTierChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['EBS/개념', '3점 문항 숙달'].map(wrapLabel),
+                datasets: [{ data: [70, 30], backgroundColor: [chartColors.primary, chartColors.secondary] }]
+            },
+            options: donutOptions
+        });
+    </script>
+</body>
+</html>
