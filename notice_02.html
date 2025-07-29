@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>수학학원 블로그 성공 전략 대시보드</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Scholarly Neutrals -->
+    <!-- Application Structure Plan: A tab-based SPA designed for non-linear exploration. The structure includes: 1) A 'Dashboard' for a high-level strategic overview and key success factors. 2) A 'Comparative Analysis' section with an interactive table to compare academies, which updates a detail view and a dynamic Chart.js chart. This is the core interactive element. 3) A 'Strategy Deep Dive' tab to explore Content, SEO, and Branding strategies in more detail. 4) An 'Action Plan' tab providing a clear, step-by-step guide for implementation. This structure was chosen to transform the dense report into a user-driven tool, allowing users to focus on the sections most relevant to them, compare competitors, and directly access actionable insights, which is more usable than a linear document. -->
+    <!-- Visualization & Content Choices: 1. Academy Comparison -> Goal: Compare/Organize -> Viz: Interactive HTML Table + JS-powered detail card -> Interaction: Clicking a table row reveals detailed info and updates a chart, allowing for direct comparison -> Justification: Far more engaging and informative than a static table. 2. Content Ratios -> Goal: Compare/Inform -> Viz: Dynamic Doughnut Chart (Chart.js/Canvas) -> Interaction: Chart updates based on the selected academy from the comparison table -> Justification: Visually represents the core strategic difference (content mix) effectively. 3. 10 Success Factors -> Goal: Inform -> Viz: Styled HTML/Tailwind list with icons (Unicode) -> Justification: More scannable and visually appealing than a standard list. 4. Action Plan -> Goal: Organize/Inform -> Viz: Accordion-style layout (HTML/Tailwind) -> Justification: Breaks down a complex process into manageable, digestible steps. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; }
+        .tab-active { border-bottom-color: #1d4ed8; color: #1d4ed8; font-weight: 700; }
+        .tab-inactive { border-bottom-color: transparent; color: #4b5563; }
+        .content-section { display: none; }
+        .content-active { display: block; }
+        .chart-container { position: relative; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto; height: 320px; max-height: 320px; }
+        .kpi-card { transition: all 0.3s ease-in-out; }
+        .kpi-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); }
+        .table-row-clickable { cursor: pointer; transition: background-color 0.2s; }
+        .table-row-clickable:hover { background-color: #eff6ff; }
+        .table-row-selected { background-color: #dbeafe; font-weight: 500; }
+        .action-step { border-left: 3px solid #93c5fd; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-slate-900">디지털 플레이북: 수학학원 블로그 성공 전략</h1>
+            <p class="mt-2 text-lg text-slate-600">상위 12개 학원 블로그 심층 분석 기반 인터랙티브 대시보드</p>
+        </header>
+
+        <nav class="mb-8 border-b border-slate-200">
+            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center">
+                <li class="mr-2">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg tab-active" data-tab="dashboard">
+                        <span class="text-lg">📊</span> 대시보드
+                    </button>
+                </li>
+                <li class="mr-2">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg tab-inactive" data-tab="analysis">
+                        <span class="text-lg">🔍</span> 전략 비교분석
+                    </button>
+                </li>
+                <li class="mr-2">
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg tab-inactive" data-tab="playbook">
+                        <span class="text-lg">📘</span> 성공 10계명
+                    </button>
+                </li>
+                <li>
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg tab-inactive" data-tab="actionplan">
+                        <span class="text-lg">🚀</span> 실행 계획
+                    </button>
+                </li>
+            </ul>
+        </nav>
+
+        <main>
+            <section id="dashboard" class="content-section content-active">
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">전략 개요: 디지털 지휘 본부로서의 블로그</h2>
+                    <p class="text-slate-600 leading-relaxed">
+                        성공적인 학원 블로그는 단순한 정보 게시판이 아닙니다. 명확한 사업 목표 아래 움직이는 '디지털 지휘 본부'입니다. 최상위 학원들의 전략은 크게 두 가지로 나뉩니다: **'선망적 브랜딩'**과 **'초지역적 리드 생성'**. 전자는 전국 단위의 명성을 구축하여 고객이 스스로 찾아오게 만들고, 후자는 특정 지역의 정보 수요를 완벽히 충족시켜 직접적인 고객 문의를 창출합니다. 이 대시보드는 두 전략의 핵심 요소를 분석하여 귀하의 학원에 맞는 최적의 길을 찾도록 돕습니다.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm kpi-card">
+                        <h3 class="font-bold text-xl text-blue-800 mb-3">👑 선망적 브랜딩 (Aspirational Branding)</h3>
+                        <p class="text-slate-600 mb-4">최상위권, 합격 신화, 스타 강사 등 '꿈'을 판매하여 전국적인 명성을 구축합니다. 유튜브 등 영상 매체를 적극 활용하여 브랜드 가치를 극대화합니다.</p>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-center"><span class="text-blue-500 mr-2">✔</span> **주요 채널:** 유튜브, 고급 홈페이지</li>
+                            <li class="flex items-center"><span class="text-blue-500 mr-2">✔</span> **핵심 콘텐츠:** 합격 수기, 만점자 인터뷰</li>
+                            <li class="flex items-center"><span class="text-blue-500 mr-2">✔</span> **대표 사례:** 대치 시대인재, 강남 하이퍼리뷰</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm kpi-card">
+                        <h3 class="font-bold text-xl text-green-800 mb-3">🎯 초지역적 리드 생성 (Hyper-Local Lead Gen)</h3>
+                        <p class="text-slate-600 mb-4">특정 지역, 특정 학교의 내신 분석 등 학부모의 절실한 정보 수요를 공략합니다. 검색엔진최적화(SEO)를 통해 직접적인 상담 문의를 유도합니다.</p>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> **주요 채널:** 네이버 블로그</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> **핵심 콘텐츠:** 학교별 기출문제 분석</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> **대표 사례:** 분당 수학의 아침, 목동 길벗아카데미</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="analysis" class="content-section">
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">전략 비교분석: 경쟁 우위 찾기</h2>
+                    <p class="text-slate-600 leading-relaxed">
+                        아래 표에서 분석 대상 학원을 클릭하여 각 학원의 상세 프로필과 콘텐츠 전략을 확인하세요. 우리 학원의 현재 위치를 파악하고, 경쟁 학원의 강점과 약점을 분석하여 차별화된 전략을 수립할 수 있습니다. 각 학원의 콘텐츠가 정보, 홍보, 관계 형성 중 어디에 집중하는지 파이 차트를 통해 직관적으로 비교해 보세요.
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm">
+                        <h3 class="text-xl font-bold mb-4">디지털 전략 스코어카드</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left text-slate-500">
+                                <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">학원명</th>
+                                        <th scope="col" class="px-6 py-3">전략 유형</th>
+                                        <th scope="col" class="px-6 py-3">SEO 강점</th>
+                                        <th scope="col" class="px-6 py-3">브랜드 일관성</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="analysis-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <h3 id="detail-title" class="text-xl font-bold mb-4 text-slate-900">학원을 선택하세요</h3>
+                        <div id="detail-view" class="space-y-4">
+                            <div class="chart-container">
+                                <canvas id="contentPieChart"></canvas>
+                            </div>
+                            <div id="detail-content" class="text-sm text-slate-600 space-y-2">
+                                <p>왼쪽 표에서 학원을 클릭하면 상세 정보가 여기에 표시됩니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="playbook" class="content-section">
+                 <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">성공하는 학원 블로그의 10계명</h2>
+                    <p class="text-slate-600 leading-relaxed">
+                        상위 학원들의 성공 전략을 분석하여 도출한 10가지 핵심 성공 원칙입니다. 이 원칙들은 블로그 운영의 방향을 설정하고, 콘텐츠의 질을 높이며, 궁극적으로 학원의 성장을 이끄는 나침반이 될 것입니다. 각 항목을 면밀히 검토하여 우리 학원의 전략에 적용해 보세요.
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-5 rounded-lg shadow-sm kpi-card">
+                        <p class="font-bold text-lg mb-2"><span class="mr-2">1.</span> 너의 지역 왕국을 정복하라</p>
+                        <p class="text-sm text-slate-600">'지역명+학교명' 키워드로 대체 불가능한 지역 전문가가 되어야 한다.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-sm kpi-card">
+                        <p class="font-bold text-lg mb-2"><span class="mr-2">2.</span> 잊을 수 없는 약속을 하라</p>
+                        <p class="text-sm text-slate-600">독특한 교수법, 품질 보증 등 증명 가능한 단 하나의 가치를 내세워라.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-sm kpi-card">
+                        <p class="font-bold text-lg mb-2"><span class="mr-2">3.</span> 불안한 학부모에게 직접 말하라</p>
+                        <p class="text-sm text-slate-600">전문적이고 안심을 주는 톤으로 학부모의 핵심 걱정을 직접 다루어라.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-sm kpi-card">
+                        <p class="font-bold text-lg mb-2"><span class="mr-2">4.</span> 선언하지 말고 증명하라</p>
+                        <p class="text-sm text-slate-600">성공 사례는 '결과'가 아닌 '과정'과 '학원의 역할'을 중심으로 서술하라.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-sm kpi-card">
+                        <p class="font-bold text-lg mb-2"><span class="mr-2">5.</span> 연간 불안 주기를 지배하라</p>
+                        <p class="text-sm text-slate-600">시험, 방학, 입시 시즌 등 학사일정에 맞춰 콘텐츠를 기획하라.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-sm kpi-card">
+                        <p class="font-bold text-lg mb-2"><span class="mr-2">6.</span> 영상을 프리미어 리그로 여겨라</p>
+                        <p class="text-sm text-slate-600">선망적 브랜딩을 위해 유튜브 등 고품질 영상에 투자하라.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-sm kpi-card">
+                        <p class="font-bold text-lg mb-2"><span class="mr-2">7.</span> 고객 유입 경로를 설계하라</p>
+                        <p class="text-sm text-slate-600">강력한/부드러운 CTA로 방문자를 잠재 고객으로 전환시켜라.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-sm kpi-card">
+                        <p class="font-bold text-lg mb-2"><span class="mr-2">8.</span> 모든 질문에 정성껏 답하라</p>
+                        <p class="text-sm text-slate-600">댓글과 문의 관리는 최고의 마케팅 활동이다.</p>
+                    </div>
+                     <div class="bg-white p-5 rounded-lg shadow-sm kpi-card">
+                        <p class="font-bold text-lg mb-2"><span class="mr-2">9.</span> 전략적 목표를 정의하라</p>
+                        <p class="text-sm text-slate-600">광역 브랜딩인가, 리드 생성인가? 하나의 목표에 모든 것을 정렬하라.</p>
+                    </div>
+                     <div class="bg-white p-5 rounded-lg shadow-sm kpi-card">
+                        <p class="font-bold text-lg mb-2"><span class="mr-2">10.</span> 전문적인 발행인이 되어라</p>
+                        <p class="text-sm text-slate-600">꾸준한 포스팅과 세련된 디자인으로 신뢰와 품질을 보여줘라.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="actionplan" class="content-section">
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">당신의 성공 청사진: 단계별 실행 계획</h2>
+                    <p class="text-slate-600 leading-relaxed">
+                        분석으로 끝나는 것이 아니라, 실제 행동으로 이어져야 합니다. 아래의 단계별 실행 계획은 블로그를 처음 시작하거나 개선하려는 학원이 즉시 적용할 수 있는 구체적인 가이드입니다. 각 단계를 따라 기반을 다지고, 콘텐츠를 제작하며, 커뮤니티와 소통하여 블로그를 강력한 성장 엔진으로 만드세요.
+                    </p>
+                </div>
+                <div class="space-y-8">
+                    <div>
+                        <div class="flex items-center mb-2">
+                            <div class="flex items-center justify-center w-10 h-10 bg-blue-200 text-blue-800 rounded-full font-bold text-lg">1</div>
+                            <h3 class="ml-4 text-xl font-bold">1단계 (첫 30일): 기반 구축 및 전략 수립</h3>
+                        </div>
+                        <div class="ml-6 pl-8 space-y-4">
+                            <div class="action-step p-4 bg-white rounded-r-lg rounded-bl-lg">
+                                <h4 class="font-semibold">1-2주차: 내부 감사 및 키워드 발굴</h4>
+                                <p class="text-sm text-slate-600">학원의 독보적인 가치(USP)를 한 문장으로 정의하고, '지역명+학교명' 조합의 핵심 키워드 10-15개를 발굴하세요.</p>
+                            </div>
+                            <div class="action-step p-4 bg-white rounded-r-lg rounded-bl-lg">
+                                <h4 class="font-semibold">3-4주차: 핵심 콘텐츠 캘린더 제작</h4>
+                                <p class="text-sm text-slate-600">향후 3개월간의 발행 계획을 수립하고, 기출 분석, 학원 시스템 소개 등 4-6개의 '초석' 콘텐츠를 기획하세요.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center mb-2">
+                            <div class="flex items-center justify-center w-10 h-10 bg-blue-200 text-blue-800 rounded-full font-bold text-lg">2</div>
+                            <h3 class="ml-4 text-xl font-bold">2단계 (31-90일): 실행 및 최적화</h3>
+                        </div>
+                        <div class="ml-6 pl-8 space-y-4">
+                            <div class="action-step p-4 bg-white rounded-r-lg rounded-bl-lg">
+                                <h4 class="font-semibold">콘텐츠 제작 및 SEO 적용</h4>
+                                <p class="text-sm text-slate-600">기획한 초석 콘텐츠를 발행하고, 제목, 소제목, 내부 링크 등 SEO를 꼼꼼하게 적용하세요. 설득력 있는 성공 사례 2-3개를 제작하세요.</p>
+                            </div>
+                             <div class="action-step p-4 bg-white rounded-r-lg rounded-bl-lg">
+                                <h4 class="font-semibold">행동 유도(CTA) 적용</h4>
+                                <p class="text-sm text-slate-600">모든 포스팅에 '상담 신청', '테스트 예약' 등 명확한 CTA 버튼을 설치하세요.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center mb-2">
+                            <div class="flex items-center justify-center w-10 h-10 bg-blue-200 text-blue-800 rounded-full font-bold text-lg">3</div>
+                            <h3 class="ml-4 text-xl font-bold">3단계 (91일 이후): 참여 및 확장</h3>
+                        </div>
+                        <div class="ml-6 pl-8 space-y-4">
+                            <div class="action-step p-4 bg-white rounded-r-lg rounded-bl-lg">
+                                <h4 class="font-semibold">커뮤니티 관리 및 성과 분석</h4>
+                                <p class="text-sm text-slate-600">매일 시간을 할애해 댓글/문의에 정성껏 응대하고, 분석 툴을 통해 어떤 콘텐츠가 효과적인지 파악하여 개선하세요.</p>
+                            </div>
+                             <div class="action-step p-4 bg-white rounded-r-lg rounded-bl-lg">
+                                <h4 class="font-semibold">신규 채널 탐색</h4>
+                                <p class="text-sm text-slate-600">블로그가 안정되면, 유튜브 영상 시리즈 등 장기적 목표에 맞는 새로운 채널로 확장을 고려하세요.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('nav button');
+            const sections = document.querySelectorAll('.content-section');
+            const analysisTableBody = document.getElementById('analysis-table-body');
+            const detailTitle = document.getElementById('detail-title');
+            const detailContent = document.getElementById('detail-content');
+            
+            const academyData = [
+                { id: 0, name: '분당 수학의 아침', type: '초지역적 지배자', seo: '최상 (초지역적)', branding: '높음', content: [70, 20, 10], desc: '<strong>핵심 전략:</strong> 지역 SEO의 마스터. 특정 학교의 기출문제를 심층 분석하여 지역 내 절대 권위를 확보하고, 설명회 참석으로 직접 연결시키는 강력한 리드 생성 엔진을 가동합니다.' },
+                { id: 1, name: '대치 시대인재', type: '선망적 브랜드', seo: '낮음 (유튜브 높음)', branding: '매우 높음', content: [20, 20, 60], desc: '<strong>핵심 전략:</strong> 유튜브를 중심으로 한 선망적 브랜딩의 전형. 수능 만점자 인터뷰 등 고품질 영상으로 \'최상위권의 선택\'이라는 이미지를 구축하여 브랜드 가치를 극대화합니다.' },
+                { id: 2, name: '목동 길벗아카데미', type: '신뢰 기반 브랜드', seo: '높음 (지역)', branding: '매우 높음', content: [45, 20, 35], desc: '<strong>핵심 전략:</strong> "선생님도 시험보는 학원"이라는 강력한 USP를 기반으로 신뢰를 구축합니다. 정보, 홍보, 관계 형성 콘텐츠를 균형있게 활용하는 모범 사례입니다.' },
+                { id: 3, name: '평촌 페르마', type: '안심/소통형 브랜드', seo: '높음 (지역)', branding: '높음', content: [55, 30, 15], desc: '<strong>핵심 전략:</strong> 친근한 어조와 상세한 프로그램 안내를 통해 학부모의 불안감을 해소하고 신뢰를 얻습니다. 투명한 정보 공개와 적극적인 소통이 강점입니다.' },
+                { id: 4, name: '대치 깊은생각', type: '시스템 기반 브랜드', seo: '보통 (브랜드 검색)', branding: '매우 높음', desc: '<strong>핵심 전략:</strong> 스타 강사진과 체계적인 학습 시스템을 중심으로 한 전통의 강자. 브랜드 파워가 높아 직접 검색을 통한 유입이 많습니다.', content: [50, 35, 15] },
+                { id: 5, name: '강남 하이퍼리뷰', type: '전문 컨설턴트 브랜드', seo: '최상 (전문 분야)', branding: '매우 높음', desc: '<strong>핵심 전략:</strong> 의대 입시라는 특정 분야의 최고 권위자로 포지셔닝. 방대한 전문 분석 자료를 무료로 제공하여 신뢰를 쌓고, 고가의 컨설팅으로 연결합니다.', content: [65, 15, 20] },
+                { id: 6, name: '평촌 강의하는아이들', type: '교수법 중심 브랜드', seo: '보통 (교수법 키워드)', branding: '매우 높음', desc: '<strong>핵심 전략:</strong> \'플립러닝\', \'하브루타\' 등 독특한 교육 방법론 자체를 브랜드로 구축하여 시장에서 강력한 차별점을 형성합니다.', content: [60, 25, 15] },
+            ];
+
+            let contentPieChart;
+            const pieChartCanvas = document.getElementById('contentPieChart').getContext('2d');
+
+            function createPieChart(data) {
+                if (contentPieChart) {
+                    contentPieChart.destroy();
+                }
+                contentPieChart = new Chart(pieChartCanvas, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['정보성', '홍보성', '관계 형성'],
+                        datasets: [{
+                            data: data,
+                            backgroundColor: ['#3b82f6', '#f59e0b', '#10b981'],
+                            borderColor: '#ffffff',
+                            borderWidth: 2,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: {
+                                        size: 12,
+                                        family: "'Noto Sans KR', sans-serif"
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed !== null) {
+                                            label += context.parsed + '%';
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function updateDetails(academy) {
+                detailTitle.textContent = academy.name;
+                detailContent.innerHTML = `<p>${academy.desc}</p>`;
+                createPieChart(academy.content);
+            }
+
+            function populateTable() {
+                academyData.forEach(academy => {
+                    const row = document.createElement('tr');
+                    row.className = 'bg-white border-b table-row-clickable';
+                    row.innerHTML = `
+                        <td class="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">${academy.name}</td>
+                        <td class="px-6 py-4">${academy.type}</td>
+                        <td class="px-6 py-4">${academy.seo}</td>
+                        <td class="px-6 py-4"><span class="font-semibold ${academy.branding === '매우 높음' ? 'text-blue-600' : 'text-slate-600'}">${academy.branding}</span></td>
+                    `;
+                    row.addEventListener('click', () => {
+                        updateDetails(academy);
+                        document.querySelectorAll('#analysis-table-body tr').forEach(r => r.classList.remove('table-row-selected'));
+                        row.classList.add('table-row-selected');
+                    });
+                    analysisTableBody.appendChild(row);
+                });
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.dataset.tab;
+
+                    tabs.forEach(t => {
+                        t.classList.remove('tab-active');
+                        t.classList.add('tab-inactive');
+                    });
+                    tab.classList.add('tab-active');
+                    tab.classList.remove('tab-inactive');
+
+                    sections.forEach(section => {
+                        section.classList.remove('content-active');
+                        if (section.id === tabName) {
+                            section.classList.add('content-active');
+                        }
+                    });
+                });
+            });
+
+            populateTable();
+            createPieChart([34, 33, 33]); // Initial placeholder chart
+            
+            if(academyData.length > 0) {
+                const initialAcademy = academyData[0];
+                updateDetails(initialAcademy);
+                const firstRow = analysisTableBody.querySelector('tr');
+                if(firstRow) {
+                    firstRow.classList.add('table-row-selected');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
